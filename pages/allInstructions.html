@@ -1,0 +1,1036 @@
+<html>
+	<head>
+		<title>Star Trek All Instructions</title>
+		<link rel="stylesheet" type="text/css" media="screen, projection" href="../css/docs.css" />
+	</head>
+<body>
+<!--  Copyright (c) 1980, 1993 -->
+<!-- 	The Regents of the University of California.  All rights reserved. -->
+<!--  Redistribution and use in source and binary forms, with or without -->
+<!--  modification, are permitted provided that the following conditions -->
+<!--  are met: -->
+<!--  1. Redistributions of source code must retain the above copyright -->
+<!--     notice, this list of conditions and the following disclaimer. -->
+<!--  2. Redistributions in binary form must reproduce the above copyright -->
+<!--     notice, this list of conditions and the following disclaimer in the -->
+<!--     documentation and/or other materials provided with the distribution. -->
+<!--  3. All advertising materials mentioning features or use of this software -->
+<!--     must display the following acknowledgement: -->
+<!-- 	This product includes software developed by the University of -->
+<!-- 	California, Berkeley and its contributors. -->
+<!--  4. Neither the name of the University nor the names of its contributors -->
+<!--     may be used to endorse or promote products derived from this software -->
+<!--     without specific prior written permission. -->
+<!--  THIS SOFTWARE IS PROVIDED BY THE REGENTS AND CONTRIBUTORS ``AS IS'' AND -->
+<!--  ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE -->
+<!--  IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE -->
+<!--  ARE DISCLAIMED.  IN NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE -->
+<!--  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL -->
+<!--  DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS -->
+<!--  OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) -->
+<!--  HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT -->
+<!--  LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY -->
+<!--  OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF -->
+<!--  SUCH DAMAGE. -->
+<!-- 	@(#)trek.me	8.1 (Berkeley) 6/8/93 -->
+<!--  reformatting and changes for this version of the game by Kent Archie Nov 2016. -->
+
+
+<h1>STAR TREK </h1>
+<div class='author'>
+by
+<br>
+Eric Allman
+<br>
+University of California
+<br>
+Berkeley
+</div>
+
+<h2>INTRODUCTION</h2>
+<p>
+Well, the federation is once again at war with the Klingon empire. 
+It is up to you,
+as captain of the U.S.S. Enterprise,
+to wipe out the invasion fleet and save the Federation. 
+</p>
+<p>
+For the purposes of the game
+the galaxy is divided into 64 quadrants
+on an eight by eight grid,
+with quadrant 0,0 in the upper left hand corner. 
+Each quadrant is divided into 100 sectors
+on a ten by ten grid. 
+Each sector contains one object
+(e.g., the Enterprise, a Klingon, or a star). 
+</p>
+<p>
+Navigation is handled in degrees,
+with zero being straight up
+and ninety being to the right. 
+Distances are measured in quadrants. 
+One tenth quadrant is one sector. 
+</p>
+<p>
+The galaxy contains starbases,
+at which you can dock to refuel,
+repair damages, etc. 
+The galaxy also contains stars. 
+Stars usually have a knack for getting in your way,
+but they can be triggered into going nova
+by shooting a photon torpedo at one,
+thereby (hopefully) destroying any adjacent Klingons. 
+This is not a good practice however,
+because you are penalized for destroying stars. 
+Also, a star will sometimes go supernova,
+which obliterates an entire quadrant. 
+You must never stop in a supernova quadrant,
+although you may "jump over" one. 
+</p>
+<p>
+Some starsystems
+have inhabited planets. 
+Klingons can attack inhabited planets
+and enslave the populace,
+which they then put to work building more Klingon battle cruisers. 
+</p>
+
+<h2>STARTING UP THE GAME</h2>
+<p>
+To request the game, issue the command
+</p>
+<pre>
+               /usr/games/trek
+</pre>
+
+<p>
+from the shell. 
+If a filename is supplied,
+a log of the game is written onto that file. 
+(Otherwise, no
+file is written.)
+If the
+``-a'' flag is stated before the filename,
+the log of the game is appended to the file. 
+</p>
+<p>
+The game will ask you what length game
+you would like. 
+Valid responses are "short", "medium", and "long". 
+You may also type "restart",
+which restarts a previously saved game. 
+Ideally,
+the length of the game does not affect the difficulty,
+but currently the shorter games tend to be harder than the longer ones. 
+</p>
+<p>
+You will then be prompted for the skill,
+to which you must respond
+"novice", "fair", "good", "expert",
+"commodore", or "impossible". 
+You should start out with a novice
+and work up,
+but if you really want to see
+how fast you can be slaughtered,
+start out with an impossible game. 
+</p>
+<p>
+In general,
+throughout the game,
+if you forget what is appropriate
+the game will tell you what it expects
+if you just type in
+a question mark. 
+</p>
+
+<h2>ISSUING COMMANDS</h2>
+<p>
+If the game expects you to enter a command,
+it will say ^"Command: "
+and wait for your response. 
+Most commands can be abbreviated. 
+</p>
+<p>
+At almost any time you can type more than one thing on a line. 
+For example,
+to move straight up one quadrant,
+you can type
+<pre>
+            move 0 1
+</pre>
+or you could just type
+<pre>
+            move
+</pre>
+and the game would prompt you with
+<pre>
+            Course:
+</pre>
+to which you could type
+<pre>
+            0 1
+</pre>
+The "1" is the distance,
+which could be put on still another line. 
+Also, the "move" command
+could have been abbreviated
+"mov", "mo", or just "m". 
+</p>
+<p>
+If you are partway through a command
+and you change your mind,
+you can usually type "-1"
+to cancel the command. 
+</p>
+<p>
+Klingons generally cannot hit you
+if you don't consume anything
+(e.g., time or energy),
+so some commands are considered "free". 
+As soon as you consume anything though -- POW! 
+</p>
+
+<h2>THE COMMANDS</h2>
+<h3 class='docs'>Short Range Scan</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>srscan</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>s</td></tr>
+<tr><th>Full Commands:</th><td>srscan<br />srscan yes/no</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+
+<p>
+The short range scan
+gives you a picture
+of the quadrant you are in,
+and (if you say "yes")
+a status report
+which tells you
+a whole bunch
+of interesting stuff. 
+You can get a status report alone
+by using the
+status
+command. 
+An example follows:
+</p>
+<p>
+Short range sensor scan
+<pre>
+  0 1 2 3 4 5 6 7 8 9
+0 . . . . . . . * . * 0   stardate      3702.16
+1 . . E . . . . . . . 1   condition     RED
+2 . . . . . . . . . * 2   position      0,3/1,2
+3 * . . . . # . . . . 3   warp factor   5.0
+4 . . . . . . . . . . 4   total energy  4376
+5 . . * . * . . . . . 5   torpedoes     9
+6 . . . @ . .   . . . 6   shields       down, 78%
+7 . . . . . . . . . . 7   Klingons left 3
+8 . . . K . . . . . . 8   time left     6.43
+9 . . . . . . * . . . 9   life support  damaged, reserves = 2.4
+  0 1 2 3 4 5 6 7 8 9
+</pre>
+Distressed Starsystem Marcus XII
+<p>
+The cast of characters is as follows:
+<pre>
+E	the hero
+K	the villain
+#	the starbase
+*	stars
+@	inhabited starsystem
+.	empty space
+	a black hole
+</pre>
+<p>
+The name of the starsystem is listed underneath
+the short range scan. 
+The word "distressed", if presetnt,
+means that the starsystem
+is under attack. 
+</p>
+<p>
+Short range scans are absolutely free. 
+They use no time, no energy,
+and they don't give the Klingons
+another chance to hit you. 
+</p>
+
+<h3 class='docs'>Status Report</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>status</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>s</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+This command gives you information
+about the current status
+of the game and your ship, as follows:
+</p>
+<table>
+<tr>
+<th>Stardate </th> 
+<td>
+The current stardate. 
+</td>
+</tr>
+<tr>
+<th>Condition </th> 
+<td>
+as follows:
+<pre>
+RED -- in battle
+YELLOW -- low on energy
+GREEN -- normal state
+DOCKED -- docked at starbase
+CLOAKED -- the cloaking device is activated
+</pre>
+</td>
+</tr>
+<tr>
+<th>Position </th> 
+<td>
+Your current quadrant and sector. 
+</td>
+</tr>
+<th>Warp Factor </th> 
+<td>
+The speed you will move at
+when you move under warp power
+(with the
+move
+command). 
+</td>
+</tr>
+<tr>
+<th>Total Energy </th> 
+<td>
+Your energy reserves. 
+If they drop to zero,
+you die. 
+Energy regenerates,
+but the higher the skill of the game,
+the slower it regenerates. 
+</td>
+</tr>
+<tr>
+<th>Torpedoes </th> 
+<td>
+How many photon torpedoes you have left. 
+<tr>
+<th>Shields </th> 
+<td>
+Whether your shields are up or down,
+and how effective they are if up
+(what percentage of a hit they will absorb). 
+</td>
+</tr>
+<tr>
+<th>Klingons Left </th> 
+<td>
+Guess. 
+</td>
+</tr>
+<tr>
+<th>Time Left </th> 
+<td>
+How long the Federation can hold out
+if you sit on your fat ass and do nothing. 
+If you kill Klingons quickly,
+this number goes up,
+otherwise,
+it goes down. 
+If it hits zero,
+the Federation is conquered. 
+</td>
+</tr>
+<tr>
+<th>Life Support </th> 
+<td>
+If "active", everything is fine. 
+If "damaged", your reserves tell you
+how long you have
+to repair your life support
+or get to a starbase
+before you starve, suffocate,
+or something equally unpleasant. 
+</td>
+</tr>
+<tr>
+<th>Current Crew </th>
+<td>
+ The number of crew members
+left. 
+This figures does not include officers. 
+</td>
+</tr>
+<tr>
+<th>Brig Space </th> 
+<td>
+The space left in your brig
+for Klingon captives. 
+</td>
+</tr>
+<tr>
+<th>Klingon Power </th> 
+<td>
+The number of units
+needed to kill a Klingon. 
+Remember, as Klingons fire at you
+they use up their own energy,
+so you probably need somewhat less
+than this. 
+</td>
+</tr>
+<tr>
+<th>Skill, Length </th> 
+<td>
+The skill and length
+of the game you are playing. 
+</td>
+</tr>
+</table>
+<p>
+Status information is absolutely free. 
+</p>
+<h3 class='docs' class='docs'>Long Range Scan</h3>
+<p>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>lrscan</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>l</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+Long range scan gives you information about the
+eight quadrants
+that surround the quadrant
+you're in. 
+A sample long range scan follows:
+</p>
+<p>
+Long range scan for quadrant 0,3
+</p>
+<pre>
+     2     3     4
+ ----------------------
+  !  *  !  *  !  *  !
+ ----------------------
+0 ! 108 !   6 !  19 !
+ ----------------------
+1 !   9 ! /// !   8 !
+ ----------------------
+</pre>
+<p>
+The three digit numbers
+tell the number of objects
+in the quadrants. 
+The units digit tells the number of stars,
+the tens digit the number of starbases,
+and the hundreds digit is the number of Klingons. 
+"*" indicates the negative energy barrier
+at the edge of the galaxy,
+which you cannot enter. 
+"///" means that that is a supernova quadrant
+and must not be entered. 
+</p>
+<h3 class='docs'>Damage Report</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>damages</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>da</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+A damage report tells you what devices are damaged
+and how long it will take to repair them. 
+Repairs proceed faster
+when you are docked
+at a starbase. 
+</p>
+
+<h3 class='docs'>Set Warp Factor</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>warp</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>w</td></tr>
+<tr><th>Full Commands:</th><td>warp factor</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+The warp factor tells the speed of your starship
+when you move under warp power
+(with the move command). 
+The higher the warp factor,
+the faster you go,
+and the more energy you use. 
+</p>
+<p>
+The minimum warp factor is 1.0
+and the maximum is 10.0. 
+At speeds above warp 6
+there is danger of the warp engines
+being damaged. 
+The probability of this
+increases at higher warp speeds. 
+Above warp 9.0 there is a chance of entering
+a time warp. 
+</p>
+<h3 class='docs'>Move Under Warp Power</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>move</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>m</td></tr>
+<tr><th>Full Commands:</th><td>move course distance</td></tr>
+<tr><th>Consumes:</th><td>time and energy</td></tr>
+</table>
+<p>
+This is the usual way of moving. 
+The course is in degrees and the distance is in quadrants. 
+To move one sector specify a distance of 0.1. 
+</p>
+<p>
+Time is consumed proportionately to
+the inverse of the warp factor squared,
+and directly to the distance. 
+Energy is consumed as the warp factor cubed,
+and directly to the distance. 
+If you move with your shields up
+it doubles the amount of energy consumed. 
+</p>
+<p>
+When you move in a quadrant containing Klingons,
+they get a chance to attack you. 
+</p>
+<p>
+The computer detects navigation errors. 
+If the computer is out,
+you run the risk of running into things. 
+</p>
+<p>
+The course is determined by the
+Space Inertial Navigation System
+[SINS]. 
+As described in
+Star Fleet Technical Order TO:02:06:12,
+the SINS is calibrated,
+after which it becomes the base for navigation. 
+If damaged,
+navigation becomes inaccurate. 
+When it is fixed,
+Spock recalibrates it,
+however,
+it cannot be calibrated extremely accurately
+until you dock at starbase. 
+</p>
+
+<h3 class='docs'>Move Under Impulse Power</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>impulse</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>i</td></tr>
+<tr><th>Full Commands:</th><td>impulse course distance</td></tr>
+<tr><th>Consumes:</th><td>time and energy</td></tr>
+</table>
+<p>
+The impulse engines give you a chance to maneuver
+when your warp engines are damaged;
+however, they are incredibly slow
+(0.095 quadrants/stardate). 
+They require 20 units of energy to engage,
+and ten units per sector to move. 
+</p>
+<p>
+The same comments about the computer and the SINS
+apply as above. 
+</p>
+<p>
+There is no penalty to move under impulse power
+with shields up. 
+</p>
+
+<h3 class='docs'>Deflector Shields</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>shields</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>sh</td></tr>
+<tr><th>Full Commands:</th><td>shields up/down</td></tr>
+<tr><th>Consumes:</th><td>energy</td></tr>
+</table>
+<p>
+Shields protect you from Klingon attack
+and nearby novas. 
+As they protect you,
+they weaken. 
+A shield which is 78% effective
+will absorb 78% of a hit
+and let 22% in to hurt you. 
+</p>
+<p>
+The Klingons have a chance to attack you
+every time you raise or lower shields. 
+Shields do not rise and lower
+instantaneously,
+so the hit you receive
+will be computed with the shields
+at an intermediate effectiveness. 
+</p>
+<p>
+It takes energy to raise shields,
+but not to drop them. 
+</p>
+<h3 class='docs'>Cloaking Device</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>cloak</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>cl</td></tr>
+<tr><th>Full Commands:</th><td>cloak up/down</td></tr>
+<tr><th>Consumes:</th><td>energy</td></tr>
+</table>
+<p>
+When you are cloaked,
+Klingons cannot see you,
+and hence they do not fire at you. 
+They are useful for entering
+a quadrant
+and selecting a good position,
+however,
+weapons cannot be fired through
+the cloak
+due to the huge energy drain
+that it requires. 
+</p>
+<p>
+The cloak up command
+only starts the cloaking process;
+Klingons will continue
+to fire at you
+until you do something
+which consumes time. 
+</p>
+
+<h3 class='docs'>Fire Phasers</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>phasers</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>p</td></tr>
+<tr><th>Full Commands:</th><td>
+phasers automatic amount<br/>
+	phasers manual amt1 course1 spread1 ...
+</td></tr>
+<tr><th>Consumes:</th><td>energy</td></tr>
+</table>
+<p>
+Phasers are energy weapons;
+the energy comes from your ship's reserves
+("total energy" on a srscan). 
+It takes about 250 units of hits
+to kill a Klingon. 
+Hits are cumulative as long as you stay
+in the quadrant. 
+</p>
+<p>
+Phasers become less effective
+the further from a Klingon you are. 
+Adjacent Klingons receive about
+90% of what you fire,
+at five sectors about 60%,
+and at ten sectors about 35%. 
+They have no effect outside of the quadrant. 
+</p>
+<p>
+Phasers cannot be fired while shields are up;
+to do so would fry you. 
+They have no effect on starbases or stars. 
+</p>
+<p>
+In automatic mode
+the computer decides how to divide up the energy
+among the Klingons present;
+in manual mode you do that yourself. 
+</p>
+<p>
+In manual mode firing
+you specify a direction,
+amount (number of units to fire)
+and spread (0 -&gt; 1.0)
+for each of the six phaser banks. 
+A zero amount
+terminates the manual input. 
+</p>
+
+<h3 class='docs'>Fire Photon Torpedoes</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>torpedo</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>t</td></tr>
+<tr><th>Full Commands:</th><td> torpedo course [yes/no] [burst angle] </td></tr>
+<tr><th>Consumes:</th><td>torpedoes</td></tr>
+</table>
+<p>
+Torpedoes are projectile weapons -- there are no partial hits. 
+You either hit your target or you don't. 
+A hit on a Klingon destroys him. 
+A hit on a starbase destroys that starbase
+(woops!). 
+Hitting a star usually causes it to go nova,
+and occasionally supernova. 
+</p>
+<p>
+Photon torpedoes cannot be aimed precisely. 
+They can be fired with shields up,
+but they get even more random
+as they pass through the shields. 
+</p>
+<p>
+Torpedoes may be fired in bursts of three. 
+If this is desired,
+the burst angle is the angle
+between the three shots,
+which may vary from one to fifteen. 
+The word "no"
+says that a burst is not wanted;
+the word "yes"
+(which may be omitted
+if stated on the same line as the course)
+says that a burst is wanted. 
+</p>
+<p>
+Photon torpedoes
+have no effect
+outside the quadrant. 
+</p>
+
+<h3 class='docs'>Onboard Computer Request</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>computer</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>c</td></tr>
+<tr><th>Full Commands:</th><td> computer request; request;...  </td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+The computer command gives you access to the facilities
+of the onboard computer,
+which allows you to do all sorts of fascinating stuff. 
+Computer requests are:
+</p>
+<table>
+<tr>
+<th>score </th>
+<td>
+ Shows your current score. 
+</td>
+</tr>
+<tr>
+<th>course quad/sect </th>
+<td>
+ Computes the course and distance from wherever
+you are to the given location. 
+If you type "course /x,y"
+you will be given the course
+to sector x,y in the current quadrant. 
+</td>
+</tr>
+<tr>
+<th>move quad/sect </th>
+<td>
+ Identical to the course
+request,
+except that the move is executed. 
+</td>
+</tr>
+<tr>
+<th>chart </th>
+<td>
+ prints a chart of the known galaxy,
+i.e.,
+everything that you have seen with a long range scan. 
+The format is the same as on a long range scan,
+except that "..." means
+that you don't yet know what is there,
+and ".1." means that you know that a starbase
+exists, but you don't know anything else. 
+"$$$" mans the quadrant
+that you are currently in. 
+</td>
+</tr>
+<tr>
+<th>trajectory </th>
+<td>
+ prints the course and distance
+to all the Klingons in the quadrant. 
+</td>
+</tr>
+<tr>
+<th>warpcost dist warp_factor </th>
+<td>
+ computes the cost in time and energy
+to move `dist' quadrants at warp `warp_factor'. 
+</td>
+</tr>
+<tr>
+<th>impcost dist </th>
+<td>
+ same as warpcost for impulse engines. 
+</td>
+</tr>
+<tr>
+<th>pheff range </th>
+<td>
+ tells how effective your phasers are
+at a given range. 
+</td>
+</tr>
+<tr>
+<th>distresslist </th>
+<td>
+ gives a list of currently distressed
+starbases
+and starsystems. 
+</td>
+</tr>
+</table>
+<p>
+More than one request may be stated
+on a line
+by separating them
+with semicolons. 
+</p>
+
+<h3 class='docs'>Dock at Starbase</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>dock</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>do</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+You may dock at a starbase
+when you are in one of the eight
+adjacent sectors. 
+</p>
+<p>
+When you dock you are resupplied
+with energy, photon torpedoes, and life support reserves. 
+Repairs are also done faster at starbase. 
+Any prisoners you have taken
+are unloaded. 
+You do not receive points
+for taking prisoners
+until this time. 
+</p>
+<p>
+Starbases have their own deflector shields,
+so you are safe from attack while docked. 
+</p>
+
+<h3 class='docs'>Undock from Starbase</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>undock</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>u</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+This just allows you to leave starbase
+so that you may proceed on your way. 
+</p>
+<h3 class='docs'>Rest</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>rest</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>r</td></tr>
+<tr><th>Full Commands:</th><td>rest time</td></tr>
+<tr><th>Consumes:</th><td>time</td></tr>
+</table>
+<p>
+This command allows you to rest to repair damages. 
+It is not advisable to rest while under attack. 
+</p>
+
+<h3 class='docs'>Call Starbase For Help</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>help</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>help</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+You may call starbase for help via your subspace radio. 
+Starbase has long range transporter beams to get you. 
+Problem is,
+they can't always rematerialize you. 
+</p>
+<p>
+You should avoid using this command unless absolutely necessary,
+for the above reason and because it counts heavily against you
+in the scoring. 
+</p>
+
+<h3 class='docs'>Capture Klingon</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>capture</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>ca</td></tr>
+<tr><th>Consumes:</th><td>time</td></tr>
+</table>
+<p>
+You may request that a Klingon surrender
+to you. 
+If he accepts,
+you get to take captives
+(but only as many as your brig
+can hold). 
+It is good if you do this,
+because you get points for captives. 
+Also,
+if you ever get captured,
+you want to be sure that the Federation
+has prisoners to exchange for you. 
+</p>
+<p>
+You must go to a starbase
+to turn over your prisoners
+to Federation authorities. 
+</p>
+
+<h3 class='docs'>Visual Scan</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>visual</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>v</td></tr>
+<tr><th>Full Commands:</th><td>visual course</td></tr>
+<tr><th>Consumes:</th><td>time</td></tr>
+</table>
+<p>
+When your short range scanners are out,
+you can still see what is out "there"
+by doing a visual scan. 
+Unfortunately,
+you can only see three sectors at one time,
+and it takes 0.005 stardates to perform. 
+</p>
+<p>
+The three sectors in the general direction
+of the course specified are examined and displayed. 
+</p>
+
+<h3 class='docs'>Abandon Ship</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>abandon</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>abandon</td></tr>
+<tr><th>Full Commands:</th><td>shields up/down</td></tr>
+<tr><th>Consumes:</th><td>nothing</td></tr>
+</table>
+<p>
+The officers escape the Enterprise in the shuttlecraft. 
+If the transporter is working
+and there is an inhabitable starsystem
+in the area,
+the crew beams down,
+otherwise you leave them to die. 
+You are given an old but still usable ship,
+the Faire Queene. 
+</p>
+
+<h3 class='docs'>Ram</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>ram</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>ram</td></tr>
+<tr><th>Full Commands:</th><td>ram course distance</td></tr>
+<tr><th>Consumes:</th><td>time and energy</td></tr>
+</table>
+<p>
+This command is identical to "move",
+except that the computer
+doesn't stop you
+from making navigation errors. 
+<p>
+<br>
+You get very nearly slaughtered
+if you ram anything. 
+</p>
+
+<h3 class='docs'>Self Destruct</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>destruct</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>destruct</td></tr>
+<tr><th>Consumes:</th><td>everything</td></tr>
+</table>
+<p>
+Your starship is self-destructed. 
+Chances are you will destroy
+any Klingons
+(and stars,
+and starbases)
+left in your quadrant. 
+</p>
+
+<h3 class='docs'>Terminate the Game</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>termnate</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>terminate</td></tr>
+<tr><th>Full Commands:</th><td>terminate yes/no</td></tr>
+</table>
+<p>
+Cancels the current game. 
+No score is computed. 
+If you answer yes,
+a new game will be started,
+otherwise trek exits. 
+</p>
+
+<h3 class='docs'>Call the Shell</h3>
+<table class='commandSummary'>
+<tr><th>Mnemonic:</th><td>shell</td></tr>
+<tr><th>Shortest Abbreviation:</th><td>shell</td></tr>
+</table>
+<p>
+Temporarily escapes to the shell. 
+When you exit the shell
+you will return to the game. 
+</p>
+
+<h2>SCORING</h2>
+<p>
+<br>
+The scoring algorithm is rather complicated. 
+Basically,
+you get points for each Klingon you kill,
+for your Klingon per stardate kill rate,
+and a bonus if you win the game. 
+You lose
+points for the number of Klingons left
+in the galaxy
+at the end of the game,
+for getting killed,
+for each star, starbase, or inhabited starsystem
+you destroy,
+for calling for help,
+and for each casualty you incur. 
+</p>
+<p>
+You will be promoted
+if you play very well. 
+You will never get a promotion if you
+call for help,
+abandon the Enterprise,
+get killed,
+destroy a starbase or inhabited starsystem,
+or destroy too many stars. 
+</p>
+
+<h2>COMMAND SUMMARY</h2>
+<table>
+<tr><th>Command</th><th>Requires</th><th>Consumes</th></tr>
+<tr><td>abandon</td><td>shuttlecraft,transporter</td><td>-</td></tr>
+<tr><td>capture</td><td>subspace radio</td><td>time</td></tr>
+<tr><td>cloak up/down</td><td>cloaking device</td><td>energy</td></tr>
+<tr><td>computer request; ...</td><td>computer</td><td>-</td></tr>
+<tr><td>damages</td><td>-</td><td>-</td></tr>
+<tr><td>destruct</td><td>computer</td><td>-</td></tr>
+<tr><td>dock</td><td>-</td><td>-</td></tr>
+<tr><td>help</td><td>subspace radio</td><td>-</td></tr>
+<tr><td>impulse course distance</td><td>impulse engines,computer,SINS</td><td>time, energy</td></tr>
+<tr><td>lrscan</td><td>L.R. sensors</td><td>-</td></tr>
+<tr><td>move course distance</td><td>warp engines,computer,SINS</td><td>time, energy</td></tr>
+<tr><td>phasers automatic amount amt1 course1 spread1</td><td>phasers, computer</td><td>energy phasers </td></tr>
+<tr><td>torpedo course [yes] angle/no</td><td>torpedo tubes</td><td>torpedoes</td></tr>
+<tr><td>ram course distance</td><td>warp engines,computer,SINS</td><td>time, energy</td></tr>
+<tr><td>rest time</td><td>-</td><td>time</td></tr>
+<tr><td>shell</td><td>-</td><td>-</td></tr>
+<tr><td>shields up/down</td><td>shields</td><td>energy</td></tr>
+<tr><td>srscan [yes/no]</td><td>S.R. sensors</td><td>-</td></tr>
+<tr><td>status</td><td>-</td><td>-</td></tr>
+<tr><td>terminate yes/no</td><td>-</td><td>-</td></tr>
+<tr><td>undock</td><td>-</td><td>-</td></tr>
+<tr><td>visual course</td><td>-</td><td>time</td></tr>
+<tr><td>warp warp_factor</td><td>-</td><td>-</td></tr>
+</table>
+</body>
+</html>

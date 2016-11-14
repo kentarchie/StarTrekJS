@@ -1,0 +1,7 @@
+docs/
+*.swp
+*.zip
+*stackdump
+attic
+attic/*
+*.log

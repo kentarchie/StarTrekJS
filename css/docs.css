@@ -1,0 +1,21 @@
+table.commandSummary th {
+	text-align: left;
+}
+table.commandSummary td  {
+	padding-left: 10px;
+}
+h3.docs {
+	display:inline;
+}
+
+table.commandSummary {
+	padding-bottom: -10px;
+}
+.summaryName {
+	font-weight:bold;
+	float:left;
+}
+.summaryValue {
+	display:inline;
+	clear:left;
+}
