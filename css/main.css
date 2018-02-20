@@ -7,10 +7,31 @@ footer {
 .leftDisplay {
 }
 
+.titleBar {
+    text-align:center;
+    font-size:32px;
+    font-style:italic;
+    font-family: 'Play','Palatino', sans-serif;
+}
+.controlsBar {
+}
+
 .mainDisplay {
+    position:relative;
+    left: 140px;
+    top: 40px;
 }
 .displayRowNum {
 	font-weight:bold;
 }
 .displayCell {
+    width: 20px;
+    height: 20px;
+}
+.displayHeaderCell {
+    border-bottom: 1px solid red;
+}
+.statusBar {
+}
+.docsBar {
 }
