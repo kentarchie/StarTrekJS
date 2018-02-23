@@ -2,6 +2,7 @@ const QUADRANT_SIZE=8;
 const SECTORS_PER_QUADRANT=10;
 const MAXROW=24;
 const MAXCOL=80;
+const DAMAGE_SIZE=9;
 
 $(document).ready(function() {
 	console.log('init:Start ');
@@ -15,7 +16,7 @@ var GameData = {
 docked : false                                     /* Docked flag (d0) */
 ,basesInQuadrant : 0                      /* Starbases in quadrant */
 ,baseLocationInSector : 0                      /* Starbases location in sector */
-,totalBases : 0                      /* Total Starbases */
+,totalBases : 0                      /* Total Starbases (b9)*/
 ,damageRepair : false                              /* Damage Repair Flag */
 ,currentEnergy : 0.0                                   /* Current Energy */
 ,startingEnergy : 3000                          /* Starting Energy */
@@ -24,7 +25,7 @@ docked : false                                     /* Docked flag (d0) */
 ,k : new Array(4)/*[4][4]*/                               /* Klingon Data */
 ,k3 : 0                        /* Klingons in Quadrant */
 ,k7 : 0                               /*  Klingons at start */
-,k9 : 0                             /* Total Klingons left */
+,totalKlingonsLeft : 0                             /* Total Klingons left (k9)*/
 ,n  : 0                      /* Number of sectors to travel */
 ,torpedoesLeft  : 0                           /* Photon Torpedoes left (p)*/
 ,torpedoCapacity  :  10                    /* Photon Torpedo capacity (p0)*/
@@ -43,7 +44,7 @@ docked : false                                     /* Docked flag (d0) */
 ,z4 : 0, z5 : 0              /* Temporary quadrant coordinates */
 
 ,a : 0, c1 : 0                   /* Used by Library Computer */
-,d : new Array(9)                                /* Damage Array */
+,damageValues : new Array(DAMAGE_SIZE)                                /* Damage Array (d) */
 ,d4 : 0         /* Used for computing damage repair time */
 ,enterpriseSectorPosition1 : 0
 ,enterpriseSectorPosition2 : 0     /* Current Sector Position of Enterprise (s1,s2)*/
@@ -58,21 +59,52 @@ docked : false                                     /* Docked flag (d0) */
 
 function initData() 
 {
-	GameData.galaxy = new Array(QUADRANT_SIZE);	
-	for(var i=0; i< QUADRANT_SIZE; ++i) {
-		GameData.galaxy[i] = new Array(QUADRANT_SIZE);
-	}
-	GameData.startingStarDate = GameData,currentStarDate;
+	GameData.galaxy = {};	
+	GameData.startingStarDate = GameData.currentStarDate;
   	GameData.endOfTime = 25 + getRandomInRange(10);
   	GameData.docked = false;
-	GameData.currentEnergy = GameData,startingEnergy;
-	GameData.torpedoesLeft = GameData,torpedoeCapacity;
+	GameData.currentEnergy = GameData.startingEnergy;
+	GameData.torpedoesLeft = GameData.torpedoCapacity;
 	GameData.shieldStrength = 0;
- 	GameData.enterpriseQuadrantPosition1 = getRandomInRange(8)();
-  	GameDataenterpriseQuadrantPosition2 = getRandomInRange(8)();
-  	GameData.enterpriseSectorPosition1 = getRandomInRange(8)();
-  	GameData.enterpriseSectorPosition2 = getRandomInRange(8)();
+ 	GameData.enterpriseQuadrantPosition1 = getRandomInRange(8);
+  	GameData.enterpriseQuadrantPosition2 = getRandomInRange(8);
+  	GameData.enterpriseSectorPosition1 =   getRandomInRange(8);
+  	GameData.enterpriseSectorPosition2 =   getRandomInRange(8);
+
+  	for (var i = 0; i < DAMAGE_SIZE; i++)
+    		GameData.damageValues[i] = 0.0;
+	
+	// setup initial galaxy data
+  	for (var row = 0; row < SECTORS_PER_QUADRANT; row++)
+		for (var column = 0; column < SECTORS_PER_QUADRANT; column++)
+      {
+			let klingonCount = getKlingonCount();
+			GameData.totalKlingonsLeft += klingonCount;
+
+         let baseInSector = false;
+         if (get_rand(100) > 96) baseInSector = true;
+			GameData.totalBases += (baseInSector) ? 1 : 0;
+			
+
+			let sectorName = i + '_' + j;
+			let thisSector = GameData[sectorName];
+			thisSector = { star : false, klingons: klingCount, base : baseInSector};
+		}
 } // initData
+
+// used to get the number of Klingons in a sector
+function getKlingonCount()
+{
+	let k = 0;
+	let r1 = getRandomInRange(100);
+	if (r1 > 98)
+		k = 3;
+	else if (r1 > 95)
+		k = 2;
+	else if (r1 > 80)
+		k = 1;
+	return k;
+} // getKlingonCount
 
 function makeDisplayHeader(display,place)
 {
