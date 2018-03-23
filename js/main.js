@@ -3,6 +3,8 @@ const SECTORS_PER_QUADRANT=10;
 const MAXROW=24;
 const MAXCOL=80;
 const DAMAGE_SIZE=9;
+const BASE_IN_SECTOR_CUTOFF=96;
+const BASE_GAME_TIME=25;
 
 $(document).ready(function() {
 	console.log('init:Start ');
@@ -17,7 +19,7 @@ docked : false                                     /* Docked flag (d0) */
 ,basesInQuadrant : 0                      /* Starbases in quadrant */
 ,baseLocationInSector : 0                      /* Starbases location in sector */
 ,totalBases : 0                      /* Total Starbases (b9)*/
-,damageRepair : false                              /* Damage Repair Flag */
+,damageRepair : false                              /* Damage Repair Flag (d1)*/
 ,currentEnergy : 0.0                                   /* Current Energy */
 ,startingEnergy : 3000                          /* Starting Energy */
 ,galaxy : []                                     /* Galaxy (g)*/
@@ -59,9 +61,9 @@ docked : false                                     /* Docked flag (d0) */
 
 function initData() 
 {
-	GameData.galaxy = {};	
+	GameData.galaxy = new Array(QUADRANT_SIZE).fill(new Array(QUADRANT_SIZE));
 	GameData.startingStarDate = GameData.currentStarDate;
-  	GameData.endOfTime = 25 + getRandomInRange(10);
+  	GameData.endOfTime = BASE_GAME_TIME + getRandomInRange(10);
   	GameData.docked = false;
 	GameData.currentEnergy = GameData.startingEnergy;
 	GameData.torpedoesLeft = GameData.torpedoCapacity;
@@ -82,14 +84,33 @@ function initData()
 			GameData.totalKlingonsLeft += klingonCount;
 
          let baseInSector = false;
-         if (get_rand(100) > 96) baseInSector = true;
+         if (get_rand(100) > BASE_IN_SECTOR_CUTOFF) baseInSector = true;
 			GameData.totalBases += (baseInSector) ? 1 : 0;
 			
 
-			let sectorName = i + '_' + j;
-			let thisSector = GameData[sectorName];
-			thisSector = { star : false, klingons: klingCount, base : baseInSector};
+			GameData.galaxy[i][j] = { star : getRandomInRange(8), klingons: klingCount, base : baseInSector};
 		}
+
+		// The number of time units is at least the same as the 
+		// number of Klingons
+		if (GameData.totalKlingonCount > GameData.endOfTime) 
+			GameData.endOfTime = GameData.totalKlingonCount + 1;
+
+		let q1 = getRandomInRange(8);
+		let q2 = getRandomInRange(8);
+		if(GameData.totalBases == 0) {
+      	if (GameData.galaxy[q1][q2].klingons < 2) {
+          	GameData.galaxy[q1][q2].klingons++;
+          	GameData.totalKlingonsLeft++;
+         }
+
+      	GameData.galaxy[q1][q2].base = true;
+      	GameData.totalBases++;
+
+      	q1 = getRandomInRange(8);
+      	q2 = getRandomInRange(8);
+		}
+
 } // initData
 
 // used to get the number of Klingons in a sector
