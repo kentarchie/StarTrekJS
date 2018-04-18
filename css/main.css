@@ -35,3 +35,10 @@ footer {
 }
 .docsBar {
 }
+
+.messageDisplay {
+	 margin-top: 50px;
+    width: 600px;
+    height: 200px;
+	 overflow-y : auto;
+}

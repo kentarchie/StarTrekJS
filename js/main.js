@@ -11,6 +11,7 @@ $(document).ready(function() {
 	makeDisplayHeader('mainDisplay','thead');
 	makeDisplayRows('mainDisplay');
 	makeDisplayHeader('mainDisplay','tfoot');
+	initData();
 	console.log('init:DONE');
 }); // init
 
@@ -26,7 +27,7 @@ docked : false                                     /* Docked flag (d0) */
 ,quadrantNameFlag : false                              /* Quadrant name flag */
 ,k : new Array(4)/*[4][4]*/                               /* Klingon Data */
 ,k3 : 0                        /* Klingons in Quadrant */
-,k7 : 0                               /*  Klingons at start */
+,klingonsAtStart : 0                               /*  Klingons at start (k7)*/
 ,totalKlingonsLeft : 0                             /* Total Klingons left (k9)*/
 ,n  : 0                      /* Number of sectors to travel */
 ,torpedoesLeft  : 0                           /* Photon Torpedoes left (p)*/
@@ -61,6 +62,7 @@ docked : false                                     /* Docked flag (d0) */
 
 function initData() 
 {
+  	GameData.currentStarDate = (getRandomInRange(20) + 20) * 100;
 	GameData.galaxy = new Array(QUADRANT_SIZE).fill(new Array(QUADRANT_SIZE));
 	GameData.startingStarDate = GameData.currentStarDate;
   	GameData.endOfTime = BASE_GAME_TIME + getRandomInRange(10);
@@ -73,56 +75,71 @@ function initData()
   	GameData.enterpriseSectorPosition1 =   getRandomInRange(8);
   	GameData.enterpriseSectorPosition2 =   getRandomInRange(8);
 
-  	for (var i = 0; i < DAMAGE_SIZE; i++)
+  	for (let i = 0; i < DAMAGE_SIZE; i++)
     		GameData.damageValues[i] = 0.0;
 	
+	console.log('GameData.galaxy.length = ' + GameData.galaxy.length);
+	console.log('GameData.galaxy[0].length = ' + GameData.galaxy[0].length);
 	// setup initial galaxy data
-  	for (var row = 0; row < SECTORS_PER_QUADRANT; row++)
-		for (var column = 0; column < SECTORS_PER_QUADRANT; column++)
+	console.log('QUADRANT_SIZE = ' + QUADRANT_SIZE + 'SECTORS_PER_QUADRANT = ' + SECTORS_PER_QUADRANT);
+  	for (let row = 0; row < QUADRANT_SIZE; row++)
+		for (let column = 0; column < QUADRANT_SIZE; column++)
       {
 			let klingonCount = getKlingonCount();
 			GameData.totalKlingonsLeft += klingonCount;
 
          let baseInSector = false;
-         if (get_rand(100) > BASE_IN_SECTOR_CUTOFF) baseInSector = true;
+         if (getRandomInRange(100) > BASE_IN_SECTOR_CUTOFF) baseInSector = true;
 			GameData.totalBases += (baseInSector) ? 1 : 0;
 			
-
-			GameData.galaxy[i][j] = { star : getRandomInRange(8), klingons: klingCount, base : baseInSector};
+			console.log('row = ' + row + ' column = ' + column);
+			GameData.galaxy[row][column] = { star : getRandomInRange(8), klingons: klingonCount, base : baseInSector};
 		}
 
-		// The number of time units is at least the same as the 
-		// number of Klingons
-		if (GameData.totalKlingonCount > GameData.endOfTime) 
+	// The number of time units is at least the same as the 
+	// number of Klingons
+	if (GameData.totalKlingonCount > GameData.endOfTime) 
 			GameData.endOfTime = GameData.totalKlingonCount + 1;
 
-		let q1 = getRandomInRange(8);
-		let q2 = getRandomInRange(8);
-		if(GameData.totalBases == 0) {
-      	if (GameData.galaxy[q1][q2].klingons < 2) {
-          	GameData.galaxy[q1][q2].klingons++;
-          	GameData.totalKlingonsLeft++;
-         }
+	let q1 = round(getRandomInRange(QUADRANT_SIZE-1),0);
+	let q2 = round(getRandomInRange(QUADRANT_SIZE-1),0);
+	console.log('first: q1 = ' + q1 + ' q2 = ' + q2);
+	if(GameData.totalBases == 0) {
+      if (GameData.galaxy[q1][q2].klingons < 2) {
+         GameData.galaxy[q1][q2].klingons++;
+         GameData.totalKlingonsLeft++;
+      }
 
-      	GameData.galaxy[q1][q2].base = true;
-      	GameData.totalBases++;
+   	GameData.galaxy[q1][q2].base = true;
+   	GameData.totalBases++;
 
-      	q1 = getRandomInRange(8);
-      	q2 = getRandomInRange(8);
-		}
-
+   	q1 = round(getRandomInRange(QUADRANT_SIZE-1),0);
+   	q2 = round(getRandomInRange(QUADRANT_SIZE-1),0);
+		console.log('second: q1 = ' + q1 + ' q2 = ' + q2);
+	}
+	GameData.klingonsAtStart = GameData.totalKlingonsLeft;
+	let sx = (GameData.totalBases != 1) ? 's' : ''; 
+	let sx0 = (GameData.totalBases != 1) ? 'are' : ''; 
+	
+  	displayMessage("Your orders are as follows:\n\n");
+  	displayMessage("   Destroy the " + GameData.totalKlingonsLeft + " Klingon warships which have invaded\n" );
+  	displayMessage(" the galaxy before they can attack Federation Headquarters\n");
+  	displayMessage(" on stardate " + round((GameData.startingStarDate  + GameData.endOfTime),2)  + ". This gives you " + round(GameData.endOfTime,0) + " days. There " + sx0+ "\n");
+  	displayMessage(GameData.totalBases + " starbase" + sx + " in the galaxy for resupplying your ship.\n\n");
+  	displayMessage("Hit any key to accept command. ");
+	
 } // initData
 
 // used to get the number of Klingons in a sector
 function getKlingonCount()
 {
-	let k = 0;
+	let k = 0; // most sectors will have 0 Klingons
 	let r1 = getRandomInRange(100);
-	if (r1 > 98)
+	if (r1 > 98)  // 2% chance of 3 Klingons
 		k = 3;
-	else if (r1 > 95)
+	else if (r1 > 95)  // 5% chance of 3 Klingons
 		k = 2;
-	else if (r1 > 80)
+	else if (r1 > 80) // 20% chance of 1 Klingon
 		k = 1;
 	return k;
 } // getKlingonCount
@@ -173,13 +190,30 @@ function makeDisplayRows(display)
 	console.log('makeDisplayHeader:DONE');
 } // makeDisplayRows
 
+function displayMessage(str)
+{
+	$('.messageDisplay').html( $('.messageDisplay').html() + str);
+} // displayMessage
+
 /* Returns an integer from 1 to iSpread */
 function getRandomInRange(iSpread)
 {
-  return((rand() % iSpread) + 1);
+  return((Math.random() % iSpread) + 1);
 }
 
 function function_r()
 {
   return(getRandomInRange(8));
 }
+
+// from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
+function round(number, precision) {
+  var shift = function (number, precision, reverseShift) {
+    if (reverseShift) {
+      precision = -precision;
+    }  
+    var numArray = ("" + number).split("e");
+    return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
+  };
+  return shift(Math.round(shift(number, precision, false)), precision, true);
+} // round
