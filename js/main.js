@@ -15,7 +15,9 @@ $(document).ready(function() {
 	console.log('init:DONE');
 }); // init
 
-var GameData = {
+let MQ = new MessageQueue();
+
+let GameData = {
 docked : false                                     /* Docked flag (d0) */
 ,basesInQuadrant : 0                      /* Starbases in quadrant */
 ,baseLocationInSector : 0                      /* Starbases location in sector */
@@ -119,14 +121,15 @@ function initData()
 	}
 	GameData.klingonsAtStart = GameData.totalKlingonsLeft;
 	let sx = (GameData.totalBases != 1) ? 's' : ''; 
-	let sx0 = (GameData.totalBases != 1) ? 'are' : ''; 
+	let sx0 = (GameData.totalBases != 1) ? 'are' : 'is'; 
 	
-  	displayMessage("Your orders are as follows:\n\n");
-  	displayMessage("   Destroy the " + GameData.totalKlingonsLeft + " Klingon warships which have invaded\n" );
-  	displayMessage(" the galaxy before they can attack Federation Headquarters\n");
-  	displayMessage(" on stardate " + round((GameData.startingStarDate  + GameData.endOfTime),2)  + ". This gives you " + round(GameData.endOfTime,0) + " days. There " + sx0+ "\n");
-  	displayMessage(GameData.totalBases + " starbase" + sx + " in the galaxy for resupplying your ship.\n\n");
-  	displayMessage("Hit any key to accept command. ");
+  	MQ.enqueue("Your orders are as follows:\n\n");
+  	MQ.enqueue("   Destroy the " + GameData.totalKlingonsLeft + " Klingon warships which have invaded\n" );
+  	MQ.enqueue(" the galaxy before they can attack Federation Headquarters\n");
+  	MQ.enqueue(" on stardate " + round((GameData.startingStarDate  + GameData.endOfTime),2)  + ". This gives you " + round(GameData.endOfTime,0) + " days. There " + sx0+ "\n");
+  	MQ.enqueue(GameData.totalBases + " starbase" + sx + " in the galaxy for resupplying your ship.\n\n");
+  	//MQ.enqueue("Hit any key to accept command. ");
+   MQ.runQueue();
 	
 } // initData
 
@@ -190,10 +193,58 @@ function makeDisplayRows(display)
 	console.log('makeDisplayHeader:DONE');
 } // makeDisplayRows
 
-function displayMessage(str)
+// queue object derived from 
+// https://stackoverflow.com/questions/5028149/how-do-i-create-a-message-queue
+function MessageQueue() {
+    let data = [];
+    let queueRunning = false;
+
+    this.isEmpty = function() {
+        return (data.length == 0);
+    };
+
+    this.enqueue = function(obj) {
+         data.push(obj);
+    };
+
+    this.runQueue = function() {
+        let mesg = '';
+        while(!this.isEmpty()) {
+            mesg += this.dequeue();
+        }
+        writeMessage(mesg);
+    };
+
+    this.dequeue = function() {
+        return data.shift();
+    };
+
+    this.peek = function() {
+        return data[0];
+    };
+
+    this.clear = function() {
+        data = [];
+    };
+}
+
+function writeMessage(content)
 {
-	$('.messageDisplay').html( $('.messageDisplay').html() + str);
-} // displayMessage
+   let contentArray = content.split("");
+   let current = 0;
+   let elem = $('.messageDisplay');
+   let messageTimer = setInterval(function() {
+            if(current < contentArray.length) {
+                let thisChar = contentArray[current];
+                if (contentArray[current] == '\n')  thisChar = '<br />';
+                if (contentArray[current] == ' ')  thisChar = '&nbsp;';
+                elem.html(elem.html() + thisChar);
+                current++;
+            }
+            else
+               clearInterval(messageTimer);
+   }, 50);
+} // writeMessage
 
 /* Returns an integer from 1 to iSpread */
 function getRandomInRange(iSpread)

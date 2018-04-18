@@ -41,4 +41,7 @@ footer {
     width: 600px;
     height: 200px;
 	 overflow-y : auto;
+    background-color:black;
+    color:#FFC200;
+    font-family: Inconsolata, monospace;
 }
