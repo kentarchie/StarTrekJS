@@ -9,13 +9,23 @@ const BASE_GAME_TIME=25;
 $(document).ready(function() {
 	console.log('init:Start ');
 	makeDisplayHeader('mainDisplay','thead');
-	makeDisplayRows('mainDisplay');
+	//makeDisplayRows('mainDisplay');
 	makeDisplayHeader('mainDisplay','tfoot');
 	initData();
 	console.log('init:DONE');
 }); // init
 
-let MQ = new MessageQueue();
+let MQ = new Utilities.MessageQueue();
+
+let displayTable = null;
+
+let spaceData = {
+	el: '#spaceDisplay',
+	data: {
+	  rows: [
+	  ]
+	}
+};
 
 let GameData = {
 docked : false                                     /* Docked flag (d0) */
@@ -64,18 +74,18 @@ docked : false                                     /* Docked flag (d0) */
 
 function initData() 
 {
-  	GameData.currentStarDate = (getRandomInRange(20) + 20) * 100;
+  	GameData.currentStarDate = (Utilities.getRandomInRange(20) + 20) * 100;
 	GameData.galaxy = new Array(QUADRANT_SIZE).fill(new Array(QUADRANT_SIZE));
 	GameData.startingStarDate = GameData.currentStarDate;
-  	GameData.endOfTime = BASE_GAME_TIME + getRandomInRange(10);
+  	GameData.endOfTime = BASE_GAME_TIME + Utilities.getRandomInRange(10);
   	GameData.docked = false;
 	GameData.currentEnergy = GameData.startingEnergy;
 	GameData.torpedoesLeft = GameData.torpedoCapacity;
 	GameData.shieldStrength = 0;
- 	GameData.enterpriseQuadrantPosition1 = getRandomInRange(8);
-  	GameData.enterpriseQuadrantPosition2 = getRandomInRange(8);
-  	GameData.enterpriseSectorPosition1 =   getRandomInRange(8);
-  	GameData.enterpriseSectorPosition2 =   getRandomInRange(8);
+ 	GameData.enterpriseQuadrantPosition1 = Utilities.getRandomInRange(8);
+  	GameData.enterpriseQuadrantPosition2 = Utilities.getRandomInRange(8);
+  	GameData.enterpriseSectorPosition1 =   Utilities.getRandomInRange(8);
+  	GameData.enterpriseSectorPosition2 =   Utilities.getRandomInRange(8);
 
   	for (let i = 0; i < DAMAGE_SIZE; i++)
     		GameData.damageValues[i] = 0.0;
@@ -84,27 +94,50 @@ function initData()
 	console.log('GameData.galaxy[0].length = ' + GameData.galaxy[0].length);
 	// setup initial galaxy data
 	console.log('QUADRANT_SIZE = ' + QUADRANT_SIZE + 'SECTORS_PER_QUADRANT = ' + SECTORS_PER_QUADRANT);
-  	for (let row = 0; row < QUADRANT_SIZE; row++)
+   let mainDisplay = [];
+  	for (let row = 0; row < QUADRANT_SIZE; row++) {
+      let columns = [];
 		for (let column = 0; column < QUADRANT_SIZE; column++)
       {
 			let klingonCount = getKlingonCount();
 			GameData.totalKlingonsLeft += klingonCount;
 
          let baseInSector = false;
-         if (getRandomInRange(100) > BASE_IN_SECTOR_CUTOFF) baseInSector = true;
+         if (Utilities.getRandomInRange(100) > BASE_IN_SECTOR_CUTOFF) baseInSector = true;
 			GameData.totalBases += (baseInSector) ? 1 : 0;
 			
 			console.log('row = ' + row + ' column = ' + column);
-			GameData.galaxy[row][column] = { star : getRandomInRange(8), klingons: klingonCount, base : baseInSector};
+			let colValue = { 
+				star : Utilities.round(Utilities.getRandomInRange(8),0)
+				,klingons: klingonCount
+				,base : baseInSector
+			};
+         let displayString = (colValue.star > 0) ? '*' : ' ';
+         displayString += (colValue.klingons > 0) ? 'K' : ' ';
+         displayString += (colValue.base) ? 'B' : ' ';
+         colValue['display'] = displayString;
+			columns.push(colValue);
+			GameData.galaxy[row][column] = { 
+				star : Utilities.round(Utilities.getRandomInRange(8),0)
+				,klingons: klingonCount
+				,base : baseInSector
+            ,display : displayString
+			};
+			//spaceData.data.rows.push(GameData.galaxy[row][column]);
 		}
+      mainDisplay.push({ cols: columns});
+   }
+		spaceData.data.rows = mainDisplay;
+      displayTable = new Vue(spaceData);
+      //console.log('display data = :'+JSON.stringify(mainDisplay,null,'\t')+':');
 
 	// The number of time units is at least the same as the 
 	// number of Klingons
 	if (GameData.totalKlingonCount > GameData.endOfTime) 
 			GameData.endOfTime = GameData.totalKlingonCount + 1;
 
-	let q1 = round(getRandomInRange(QUADRANT_SIZE-1),0);
-	let q2 = round(getRandomInRange(QUADRANT_SIZE-1),0);
+	let q1 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
+	let q2 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
 	console.log('first: q1 = ' + q1 + ' q2 = ' + q2);
 	if(GameData.totalBases == 0) {
       if (GameData.galaxy[q1][q2].klingons < 2) {
@@ -115,8 +148,8 @@ function initData()
    	GameData.galaxy[q1][q2].base = true;
    	GameData.totalBases++;
 
-   	q1 = round(getRandomInRange(QUADRANT_SIZE-1),0);
-   	q2 = round(getRandomInRange(QUADRANT_SIZE-1),0);
+   	q1 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
+   	q2 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
 		console.log('second: q1 = ' + q1 + ' q2 = ' + q2);
 	}
 	GameData.klingonsAtStart = GameData.totalKlingonsLeft;
@@ -126,7 +159,7 @@ function initData()
   	MQ.enqueue("Your orders are as follows:\n\n");
   	MQ.enqueue("   Destroy the " + GameData.totalKlingonsLeft + " Klingon warships which have invaded\n" );
   	MQ.enqueue(" the galaxy before they can attack Federation Headquarters\n");
-  	MQ.enqueue(" on stardate " + round((GameData.startingStarDate  + GameData.endOfTime),2)  + ". This gives you " + round(GameData.endOfTime,0) + " days. There " + sx0+ "\n");
+  	MQ.enqueue(" on stardate " + Utilities.round((GameData.startingStarDate  + GameData.endOfTime),2)  + ". This gives you " + Utilities.round(GameData.endOfTime,0) + " days. There " + sx0+ "\n");
   	MQ.enqueue(GameData.totalBases + " starbase" + sx + " in the galaxy for resupplying your ship.\n\n");
   	//MQ.enqueue("Hit any key to accept command. ");
    MQ.runQueue();
@@ -137,7 +170,8 @@ function initData()
 function getKlingonCount()
 {
 	let k = 0; // most sectors will have 0 Klingons
-	let r1 = getRandomInRange(100);
+	let r1 = Utilities.getRandomInRange(100);
+   console.log(`getKlingonCount: r1=:${r1}:`);
 	if (r1 > 98)  // 2% chance of 3 Klingons
 		k = 3;
 	else if (r1 > 95)  // 5% chance of 3 Klingons
@@ -168,9 +202,10 @@ function makeDisplayRows(display)
 {
 	var first,last,row;
 	console.log('makeDisplayRows:START');
-	for(var rowNum=0; rowNum< SECTORS_PER_QUADRANT; ++rowNum) {
+	//for(var rowNum=0; rowNum< SECTORS_PER_QUADRANT; ++rowNum) {
 		//console.log('makeDisplayRows: creating rowNum=:'+rowNum+':');
 		row = document.createElement('tr');
+		row.setAttribute('v-for','row in rows');
 		first = document.createElement('td');
 		first.setAttribute('class','displayRowNum');
 		first.innerHTML = rowNum;
@@ -184,87 +219,21 @@ function makeDisplayRows(display)
 			var item = document.createElement('td');
 			item.setAttribute('class','displayCell');
 			item.setAttribute('id',rowNum+'_'+i);
-			item.innerHTML ='&nbsp;';
+			item.innerHTML ='{{row.star}}';
+			row.appendChild(item);
+			item = document.createElement('td');
+			item.setAttribute('class','displayCell');
+			item.setAttribute('id',rowNum+'_'+i);
+			item.innerHTML ='{{row.klingons}}';
+			row.appendChild(item);
+			item = document.createElement('td');
+			item.setAttribute('class','displayCell');
+			item.setAttribute('id',rowNum+'_'+i);
+			item.innerHTML ='{{row.base}}';
 			row.appendChild(item);
 		}
 		row.appendChild(last);
 		$('.'+display+' tbody').append(row);
-	}
+	//}
 	console.log('makeDisplayHeader:DONE');
 } // makeDisplayRows
-
-// queue object derived from 
-// https://stackoverflow.com/questions/5028149/how-do-i-create-a-message-queue
-function MessageQueue() {
-    let data = [];
-    let queueRunning = false;
-
-    this.isEmpty = function() {
-        return (data.length == 0);
-    };
-
-    this.enqueue = function(obj) {
-         data.push(obj);
-    };
-
-    this.runQueue = function() {
-        let mesg = '';
-        while(!this.isEmpty()) {
-            mesg += this.dequeue();
-        }
-        writeMessage(mesg);
-    };
-
-    this.dequeue = function() {
-        return data.shift();
-    };
-
-    this.peek = function() {
-        return data[0];
-    };
-
-    this.clear = function() {
-        data = [];
-    };
-}
-
-function writeMessage(content)
-{
-   let contentArray = content.split("");
-   let current = 0;
-   let elem = $('.messageDisplay');
-   let messageTimer = setInterval(function() {
-            if(current < contentArray.length) {
-                let thisChar = contentArray[current];
-                if (contentArray[current] == '\n')  thisChar = '<br />';
-                if (contentArray[current] == ' ')  thisChar = '&nbsp;';
-                elem.html(elem.html() + thisChar);
-                current++;
-            }
-            else
-               clearInterval(messageTimer);
-   }, 50);
-} // writeMessage
-
-/* Returns an integer from 1 to iSpread */
-function getRandomInRange(iSpread)
-{
-  return((Math.random() % iSpread) + 1);
-}
-
-function function_r()
-{
-  return(getRandomInRange(8));
-}
-
-// from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
-function round(number, precision) {
-  var shift = function (number, precision, reverseShift) {
-    if (reverseShift) {
-      precision = -precision;
-    }  
-    var numArray = ("" + number).split("e");
-    return +(numArray[0] + "e" + (numArray[1] ? (+numArray[1] + precision) : precision));
-  };
-  return shift(Math.round(shift(number, precision, false)), precision, true);
-} // round

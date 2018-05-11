@@ -3,6 +3,7 @@
 		<title>JavaScript Star Trek Game</title>
 		<link rel='stylesheet' type='text/css' media='screen, projection' href='https://fonts.googleapis.com/css?family=Play' /> 
 		<link rel='stylesheet' type='text/css' media='screen, projection' href='css/main.css' />
+		<link rel='stylesheet' type='text/css' media='screen, projection' href='css/settingsMenu.css' />
 	</head>
 
 <body>
@@ -11,10 +12,38 @@
     <div class='controlsBar'></div>
 </header>
 
+<nav role="navigation">
+  <div id="menuToggle">
+      <form id='settings' name='settings' action=''>
+          <label for='logAppend'>Append To Log</label>
+          <input type='checkbox' id='logAppend' />
+          <br />
+
+          <label for='playMode'>Play Mode</label>
+          <div>
+            <label for='fastMode'>Fast</label>
+            <input type='radio' name='playMode' id='fastMode' />
+            <label for='slowMode'>Slow</label>
+            <input type='radio' name='playMode' id='slowMode' />
+          </div>
+          <br />
+
+          <label for='priority'>Priority</label>
+          <input type='input' id='priority' size=1 />
+      </form>
+  </div>
+</nav>
+
 <div class='leftDisplay'>
-	<table class='mainDisplay'>
+	<table id='spaceDisplay' class='mainDisplay'>
 	   <thead> </thead>
-	   <tbody> </tbody>
+	   <tbody> 
+        <tr v-if = "rows!=null" v-for="row in rows">
+         <td v-for="col in row.cols">
+         {{col.display}}
+      </td>
+    </tr>
+      </tbody>
 	   <tfoot> </tfoot>
 	</table>
 </div> <!-- leftDisplay -->
@@ -29,6 +58,9 @@
 
     <script type='text/javascript' src='js/vue.js'></script>
     <script type='text/javascript' src='js/jquery.js'></script>
+    <script type='text/javascript' src='js/trek_H.js'></script>
+    <script type='text/javascript' src='js/dataTypes.js'></script>
+    <script type='text/javascript' src='js/utilities.js'></script>
     <script type='text/javascript' src='js/main.js'></script>
 </body>
 </html>
