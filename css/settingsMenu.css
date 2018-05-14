@@ -1,29 +1,44 @@
-#menuToggle
-{
-  display: block;
+@keyframes onScreenSlide {
+  0% {
+    left: -500px;
+  }
+  100% {
+    left: 0px;
+  }
+}
+
+@keyframes offScreenSlide {
+  0% {
+    left: 0px;
+  }
+  100% {
+    left: -500px;
+  }
+}
+
+.initialPlace {
+    left: -500px;
+  }
+  
+.onScreen {
+  animation: onScreenSlide 2s;
+}
+
+.offScreen {
+  animation: offScreenSlide 2s;
+}
+
+#menuToggle {
   position: relative;
-  top: 50px;
-  left: 50px;
   background-color: beige;
   border: 1px solid black;
   width: 15em;
-  
   z-index: 1;
 }
-#menuToggle div
-{
-  display:inline;
+
+#menuToggle div {
+  display: inline;
   border: 1px solid green;
   width: 10em;
 }
 
-#menu
-{
-  position: absolute;
-  width: 300px;
-  margin: -100px 0 0 -50px;
-  padding: 50px;
-  padding-top: 125px;
-  
-  background: #ededed;
-}

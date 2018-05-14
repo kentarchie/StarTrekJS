@@ -12,6 +12,7 @@ $(document).ready(function() {
 	//makeDisplayRows('mainDisplay');
 	makeDisplayHeader('mainDisplay','tfoot');
 	initData();
+	makeSetupForm();
 	console.log('init:DONE');
 }); // init
 
@@ -90,10 +91,10 @@ function initData()
   	for (let i = 0; i < DAMAGE_SIZE; i++)
     		GameData.damageValues[i] = 0.0;
 	
-	console.log('GameData.galaxy.length = ' + GameData.galaxy.length);
-	console.log('GameData.galaxy[0].length = ' + GameData.galaxy[0].length);
+	//console.log('GameData.galaxy.length = ' + GameData.galaxy.length);
+	//console.log('GameData.galaxy[0].length = ' + GameData.galaxy[0].length);
 	// setup initial galaxy data
-	console.log('QUADRANT_SIZE = ' + QUADRANT_SIZE + 'SECTORS_PER_QUADRANT = ' + SECTORS_PER_QUADRANT);
+	//console.log('QUADRANT_SIZE = ' + QUADRANT_SIZE + 'SECTORS_PER_QUADRANT = ' + SECTORS_PER_QUADRANT);
    let mainDisplay = [];
   	for (let row = 0; row < QUADRANT_SIZE; row++) {
       let columns = [];
@@ -106,7 +107,7 @@ function initData()
          if (Utilities.getRandomInRange(100) > BASE_IN_SECTOR_CUTOFF) baseInSector = true;
 			GameData.totalBases += (baseInSector) ? 1 : 0;
 			
-			console.log('row = ' + row + ' column = ' + column);
+			//console.log('row = ' + row + ' column = ' + column);
 			let colValue = { 
 				star : Utilities.round(Utilities.getRandomInRange(8),0)
 				,klingons: klingonCount
@@ -138,7 +139,7 @@ function initData()
 
 	let q1 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
 	let q2 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
-	console.log('first: q1 = ' + q1 + ' q2 = ' + q2);
+	//console.log('first: q1 = ' + q1 + ' q2 = ' + q2);
 	if(GameData.totalBases == 0) {
       if (GameData.galaxy[q1][q2].klingons < 2) {
          GameData.galaxy[q1][q2].klingons++;
@@ -150,7 +151,7 @@ function initData()
 
    	q1 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
    	q2 = Utilities.round(Utilities.getRandomInRange(QUADRANT_SIZE-1),0);
-		console.log('second: q1 = ' + q1 + ' q2 = ' + q2);
+		//console.log('second: q1 = ' + q1 + ' q2 = ' + q2);
 	}
 	GameData.klingonsAtStart = GameData.totalKlingonsLeft;
 	let sx = (GameData.totalBases != 1) ? 's' : ''; 
@@ -171,7 +172,7 @@ function getKlingonCount()
 {
 	let k = 0; // most sectors will have 0 Klingons
 	let r1 = Utilities.getRandomInRange(100);
-   console.log(`getKlingonCount: r1=:${r1}:`);
+   //console.log(`getKlingonCount: r1=:${r1}:`);
 	if (r1 > 98)  // 2% chance of 3 Klingons
 		k = 3;
 	else if (r1 > 95)  // 5% chance of 3 Klingons
@@ -183,7 +184,7 @@ function getKlingonCount()
 
 function makeDisplayHeader(display,place)
 {
-	console.log('makeDisplayHeader:START: place=:'+place+':');
+	//console.log('makeDisplayHeader:START: place=:'+place+':');
 	var row = document.createElement('tr');
 	var item = document.createElement('th');
 	item.innerHTML = '';
@@ -195,13 +196,13 @@ function makeDisplayHeader(display,place)
 		row.appendChild(item);
 	}
 	$('.'+display+' '+place).append(row);
-	console.log('makeDisplayHeader:DONE: place=:'+place+':');
+	//console.log('makeDisplayHeader:DONE: place=:'+place+':');
 } // makeDisplayHeader
 
 function makeDisplayRows(display)
 {
 	var first,last,row;
-	console.log('makeDisplayRows:START');
+	//console.log('makeDisplayRows:START');
 	//for(var rowNum=0; rowNum< SECTORS_PER_QUADRANT; ++rowNum) {
 		//console.log('makeDisplayRows: creating rowNum=:'+rowNum+':');
 		row = document.createElement('tr');
@@ -235,5 +236,19 @@ function makeDisplayRows(display)
 		row.appendChild(last);
 		$('.'+display+' tbody').append(row);
 	//}
-	console.log('makeDisplayHeader:DONE');
+	//console.log('makeDisplayHeader:DONE');
 } // makeDisplayRows
+
+function makeSetupForm()
+{
+	$('#menuToggle').removeClass('initialPlace'); 
+	console.log('class removed');
+	$('#openSettings').click(function(ev) {
+		let menu=$('#menuToggle');
+		let buttonLabel = $.trim($(this).html());
+		buttonLabel = (buttonLabel == 'Open') ? 'Close' : 'Open';
+		$(this).html(buttonLabel);
+		menu.toggleClass('offScreen');
+		menu.toggleClass('onScreen');
+	});
+} // makeSetupForm

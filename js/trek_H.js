@@ -134,15 +134,13 @@ let Constants = {
  *	1001		starbase + ??? (".1.")
 */
 
-/* ascii names of systems */
-extern char	*Systemname[NINHAB];
 
 /* quadrant definition */
-struct quad	Quad[NQUADS][NQUADS];
+//struct quad	Quad[NQUADS][NQUADS];
 
 
 /* current sector map */
-char	Sect[NSECTS][NSECTS];
+//char	Sect[NSECTS][NSECTS];
 
 /* systemname conventions:
  *	1 -> NINHAB	index into Systemname table for reported distress calls
@@ -154,136 +152,128 @@ char	Sect[NSECTS][NSECTS];
  *	0		unallocated
  */
 
-struct device	Device[NDEV];
-
-
-struct event	Event[MAXEVENTS];	/* dynamic event list; one entry per pending event */
+/* dynamic event list; one entry per pending event */
+let Events = new Array(Constants.MAXEVENTS);	
 
 /* information regarding the state of the starship */
-struct
-{
-	double	warp;		/* warp factor */
-	double	warp2;		/* warp factor squared */
-	double	warp3;		/* warp factor cubed */
-	char	shldup;		/* shield up flag */
-	char	cloaked;	/* set if cloaking device on */
-	int	energy;		/* starship's energy */
-	int	shield;		/* energy in shields */
-	double	reserves;	/* life support reserves */
-	int	crew;		/* ship's complement */
-	int	brigfree;	/* space left in brig */
-	char	torped;		/* torpedoes */
-	char	cloakgood;	/* set if we have moved */
-	int	quadx;		/* quadrant x coord */
-	int	quady;		/* quadrant y coord */
-	int	sectx;		/* sector x coord */
-	int	secty;		/* sector y coord */
-	char	cond;		/* condition code */
-	char	sinsbad;	/* Space Inertial Navigation System condition */
-	char	*shipname;	/* name of current starship */
-	char	ship;		/* current starship */
-	int	distressed;	/* number of distress calls */
-}	Ship;
+let Ship = {
+	warp :       0.0		/* warp factor */
+	,warp2 :     0.0		/* warp factor squared */
+	,warp3 :     0.0		/* warp factor cubed */
+	,shldup : 	 ''		/* shield up flag */
+	,cloaked :   ''	/* set if cloaking device on */
+	,energy : 	 0		/* starship's energy */
+	,shield : 	 0		/* energy in shields */
+	,reserves :  0.0	/* life support reserves */
+	,crew : 		 0		/* ship's complement */
+	,brigfree :  0	/* space left in brig */
+	,torped :    ''		/* torpedoes */
+	,cloakgood : ''	/* set if we have moved */
+	,quadx :     0		/* quadrant x coord */
+	,quady :     0		/* quadrant y coord */
+	,sectx :     0		/* sector x coord */
+	,secty :     0		/* sector y coord */
+	,cond :      ''		/* condition code */
+	,sinsbad :  ''	/* Space Inertial Navigation System condition */
+	,shipname :  ''	/* name of current starship */
+	,ship :      ''		/* current starship */
+	,distressed : 0	/* number of distress calls */
+}	// Ship;
 
 /* sinsbad is set if SINS is working but not calibrated */
 
 /* game related information, mostly scoring */
-struct
-{
-	int	killk;		/* number of klingons killed */
-	int	deaths;		/* number of deaths onboard Enterprise */
-	char	negenbar;	/* number of hits on negative energy barrier */
-	char	killb;		/* number of starbases killed */
-	int	kills;		/* number of stars killed */
-	char	skill;		/* skill rating of player */
-	char	length;		/* length of game */
-	char	killed;		/* set if you were killed */
-	char	killinhab;	/* number of inhabited starsystems killed */
-	char	tourn;		/* set if a tournament game */
-	char	passwd[15];	/* game password */
-	char	snap;		/* set if snapshot taken */
-	char	helps;		/* number of help calls */
-	int	captives;	/* total number of captives taken */
-}	Game;
+let Game = {
+	killk : 0		/* number of klingons killed */
+	,deaths : 0		/* number of deaths onboard Enterprise */
+	,negenbar : ''	/* number of hits on negative energy barrier */
+	,killb : ''		/* number of starbases killed */
+	,kills : 0		/* number of stars killed */
+	,skill : ''		/* skill rating of player */
+	,length : ''		/* length of game */
+	,killed : ''		/* set if you were killed */
+	,killinhab : ''	/* number of inhabited starsystems killed */
+	,tourn : ''		/* set if a tournament game */
+	,passwd : new Array(15)	/* game password */
+	,snap : ''		/* set if snapshot taken */
+	,helps : ''		/* number of help calls */
+	,captives : 0	/* total number of captives taken */
+}	//Game;
 
 /* per move information */
-struct
-{
-	char	free;		/* set if a move is free */
-	char	endgame;	/* end of game flag */
-	char	shldchg;	/* set if shields changed this move */
-	char	newquad;	/* set if just entered this quadrant */
-	char	resting;	/* set if this move is a rest */
-	double	time;		/* time used this move */
-}	Move;
+let Move = {
+	free : ''		/* set if a move is free */
+	,endgame : ''	/* end of game flag */
+	,shldchg : ''	/* set if shields changed this move */
+	,newquad : ''	/* set if just entered this quadrant */
+	,resting : ''	/* set if this move is a rest */
+	,time : 0.0		/* time used this move */
+}	//Move;
 
 /* parametric information */
-struct
-{
-	char	bases;		/* number of starbases */
-	char	klings;		/* number of klingons */
-	double	date;		/* stardate */
-	double	time;		/* time left */
-	double	resource;	/* Federation resources */
-	int	energy;		/* starship's energy */
-	int	shield;		/* energy in shields */
-	double	reserves;	/* life support reserves */
-	int	crew;		/* size of ship's complement */
-	int	brigfree;	/* max possible number of captives */
-	char	torped;		/* photon torpedos */
-	double	damfac[NDEV];	/* damage factor */
-	double	dockfac;	/* docked repair time factor */
-	double	regenfac;	/* regeneration factor */
-	int	stopengy;	/* energy to do emergency stop */
-	int	shupengy;	/* energy to put up shields */
-	int	klingpwr;	/* Klingon initial power */
-	int	warptime;	/* time chewer multiplier */
-	double	phasfac;	/* Klingon phaser power eater factor */
-	char	moveprob[6];	/* probability that a Klingon moves */
-	double	movefac[6];	/* Klingon move distance multiplier */
-	double	eventdly[NEVENTS];	/* event time multipliers */
-	double	navigcrud[2];	/* navigation crudup factor */
-	int	cloakenergy;	/* cloaking device energy per stardate */
-	double	damprob[NDEV];	/* damage probability */
-	double	hitfac;		/* Klingon attack factor */
-	int	klingcrew;	/* number of Klingons in a crew */
-	double	srndrprob;	/* surrender probability */
-	int	energylow;	/* low energy mark (cond YELLOW) */
-}	Param;
+let Param = {
+	bases : 0		/* number of starbases */
+	,klings : 0		/* number of klingons */
+	,date : 0.0		/* stardate */
+	,time : 0.0		/* time left */
+	,resource : 0.0	/* Federation resources */
+	,energy : 0		/* starship's energy */
+	,shield : 0		/* energy in shields */
+	,reserves : 0.0	/* life support reserves */
+	,crew : 0		/* size of ship's complement */
+	,brigfree : 0	/* max possible number of captives */
+	,torped : 0		/* photon torpedos */
+	,dockfac : 0.0	/* docked repair time factor */
+	,regenfac : 0.0	/* regeneration factor */
+	,stopengy : 0	/* energy to do emergency stop */
+	,shupengy : 0	/* energy to put up shields */
+	,klingpwr : 0	/* Klingon initial power */
+	,warptime : 0	/* time chewer multiplier */
+	,phasfac : 0.0	/* Klingon phaser power eater factor */
+	,cloakenergy : 0	/* cloaking device energy per stardate */
+	,hitfac : 0.0		/* Klingon attack factor */
+	,klingcrew : 0	/* number of Klingons in a crew */
+	,srndrprob : 0.0	/* surrender probability */
+	,energylow : 0	/* low energy mark (cond YELLOW) */
+	,moveprob   : Array(6).fill(0) /* probability that a Klingon moves */
+	,movefac    : Array(6).fill(0.0) /* Klingon move distance multiplier */
+	,eventdly   : Array(Constants.NEVENTS).fill(0.0) /* event time multipliers */
+	,navigcrud  : Array(2).fill(0.0) /* navigation crudup factor */
+	,damprob    : Array(Constants.NDEV).fill(0.0) /* damage probability */
+	,damfacnew  : Array(Constants.NDEV).fill(0.0)	/* damage factor */
+}	//Param;
 
 /* Sum of damage probabilities must add to 1000 */
 
 /* other information kept in a snapshot */
-struct
-{
-	char	bases;		/* number of starbases */
-	char	klings;		/* number of klingons */
-	double	date;		/* stardate */
-	double	time;		/* time left */
-	double	resource;	/* Federation resources */
-	char	distressed;	/* number of currently distressed quadrants */
-	struct event	*eventptr[NEVENTS];	/* pointer to event structs */
-	struct xy	base[MAXBASES];		/* locations of starbases */
-}	Now;
+let Now = {
+	bases : 0		/* number of starbases */
+	,klings : 0		/* number of klingons */
+	,date : 0.0		/* stardate */
+	,time : 0.0		/* time left */
+	,resource : 0.0	/* Federation resources */
+	,distressed : 0	/* number of currently distressed quadrants */
+	,eventptr : new Array(Constants.NEVENTS)	/* pointer to event structs */
+	,base : new Array(Constants.MAXBASES)		/* locations (xy)  of starbases */
+}	//Now;
 
 /* Other stuff, not dumped in a snapshot */
-struct
-{
-	struct kling	klingon[MAXKLQUAD];	/* sorted Klingon list */
-	char		nkling;			/* number of Klingons in this sector */
+let Etc = {
+	klingon : new Array(Constants.MAXKLQUAD)	/* sorted Klingon list */
+	,nkling : 0			/* number of Klingons in this sector */
 						/* < 0 means automatic override mode */
-	char		fast;			/* set if speed > 300 baud */
-	struct xy	starbase;	/* starbase in current quadrant */
-	char		snapshot[sizeof Quad + sizeof Event + sizeof Now];	/* snapshot for time warp */
-	char		statreport;		/* set to get a status report on a srscan */
-}	Etc;
+	,fast : 0			/* set if speed > 300 baud */
+	,starbase : null	/* starbase in (xy) current quadrant */
+	,snapshot : null	/* array snapshot for time warp */
+	,statreport : false		/* set to get a status report on a srscan */
+}	//Etc;
 
 /*
  *	eventptr is a pointer to the event[] entry of the last
  *	scheduled event of each type.  Zero if no such event scheduled.
  */
 
-let Device = [
+let Devices = [
    { device : 'warp drive',         person : 'Scotty'}
    ,{ device : 'S.R. scanners',      person : 'Scotty'}
    ,{ device : 'L.R. scanners',      person : 'Scotty'}
@@ -300,8 +290,9 @@ let Device = [
    ,{ device : 'shuttlecraft',       person : 'Scotty'}
    ,{ device : '*ERR 14*',           person : 'Nobody'}
    ,{ device : '*ERR 15*',           person : 'Nobody'}
-};
+];
 
+/* ascii names of systems */
 let Systemname = [
 	'ERROR'
 	,'Talos IV'
@@ -336,4 +327,3 @@ let Systemname = [
 	,'Epsilon Eridani IV'
 	,'Exo III'
 ];
-

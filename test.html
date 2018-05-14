@@ -1,0 +1,64 @@
+<html>
+	<head>
+		<title>JavaScript Star Trek Game</title>
+		<link rel='stylesheet' type='text/css' media='screen, projection' href='https://fonts.googleapis.com/css?family=Play' /> 
+		<link rel='stylesheet' type='text/css' media='screen, projection' href='css/main.css' />
+		<link rel='stylesheet' type='text/css' media='screen, projection' href='css/settingsMenu.css' />
+	</head>
+
+<body>
+<header>
+    <!-- <div class='titleBar'>Javascript Star Trek</div> -->
+    <div class='controlsBar'></div>
+</header>
+
+    <nav role="navigation">
+      <div id="menuToggle" class='initialPlace'>
+
+        <label for='logAppend'>Append To Log</label>
+        <input type='checkbox' id='logAppend' />
+        <br />
+
+        <label for='playMode'>Play Mode</label>
+        <div>
+          <label for='fastMode'>Fast</label>
+          <input type='radio' name='playMode' id='fastMode' />
+          <label for='slowMode'>Slow</label>
+          <input type='radio' name='playMode' id='slowMode' />
+        </div>
+        <br />
+
+        <label for='priority'>Priority</label>
+        <input type='input' id='priority' size=1 />
+
+      </div>
+    </nav>
+
+    <button type='button' id='openSettings'>
+      Open
+    </button>
+
+    <script type='text/javascript' src='js/vue.js'></script>
+    <script type='text/javascript' src='js/jquery.js'></script>
+    <script type='text/javascript'>
+		$(document).ready(function() {
+			console.log('init:Start ');
+			//$('#menuToggle').removeClass('initialPlace'); 
+			console.log('class removed');
+			$('#openSettings').click((ev) => {
+				console.log('openSettings clicked ');
+				let menu=$('#menuToggle');
+				let buttonLabel = $.trim($(this).html());
+				buttonLabel = (buttonLabel == 'Open') ? 'Close' : 'Open';
+				console.log('buttonLabel =:'+buttonLabel+':');
+				$(this).html(buttonLabel);
+				menu.toggleClass('offScreen');
+				menu.toggleClass('onScreen');
+					
+			console.log('init:DONE');
+		}); 
+		}); // init
+	 
+	 </script>
+</body>
+</html>

@@ -12,28 +12,31 @@
     <div class='controlsBar'></div>
 </header>
 
-<nav role="navigation">
-  <div id="menuToggle">
-      <form id='settings' name='settings' action=''>
-          <label for='logAppend'>Append To Log</label>
-          <input type='checkbox' id='logAppend' />
-          <br />
+    <nav role="navigation">
+      <div id="menuToggle" class='initialPlace'>
 
-          <label for='playMode'>Play Mode</label>
-          <div>
-            <label for='fastMode'>Fast</label>
-            <input type='radio' name='playMode' id='fastMode' />
-            <label for='slowMode'>Slow</label>
-            <input type='radio' name='playMode' id='slowMode' />
-          </div>
-          <br />
+        <label for='logAppend'>Append To Log</label>
+        <input type='checkbox' id='logAppend' />
+        <br />
 
-          <label for='priority'>Priority</label>
-          <input type='input' id='priority' size=1 />
-      </form>
-  </div>
-</nav>
+        <label for='playMode'>Play Mode</label>
+        <div>
+          <label for='fastMode'>Fast</label>
+          <input type='radio' name='playMode' id='fastMode' />
+          <label for='slowMode'>Slow</label>
+          <input type='radio' name='playMode' id='slowMode' />
+        </div>
+        <br />
 
+        <label for='priority'>Priority</label>
+        <input type='input' id='priority' size=1 />
+
+      </div>
+    </nav>
+
+    <button type='button' id='openSettings'>
+      Open
+    </button>
 <div class='leftDisplay'>
 	<table id='spaceDisplay' class='mainDisplay'>
 	   <thead> </thead>
