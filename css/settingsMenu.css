@@ -1,25 +1,21 @@
 @keyframes onScreenSlide {
   0% {
-    left: -500px;
+    left: -16em;
   }
   100% {
-    left: 0px;
+    left: 0em;
   }
 }
 
 @keyframes offScreenSlide {
   0% {
-    left: 0px;
+    left: 0em;
   }
   100% {
-    left: -500px;
+    left: -16em;
   }
 }
 
-.initialPlace {
-    left: -500px;
-  }
-  
 .onScreen {
   animation: onScreenSlide 2s;
 }
@@ -28,17 +24,17 @@
   animation: offScreenSlide 2s;
 }
 
-#menuToggle {
+#settingsForm {
   position: relative;
   background-color: beige;
   border: 1px solid black;
   width: 15em;
+  left : -16em;
   z-index: 1;
 }
 
-#menuToggle div {
+#settingsForm div {
   display: inline;
   border: 1px solid green;
   width: 10em;
 }
-
