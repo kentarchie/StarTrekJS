@@ -1,19 +1,26 @@
+:root { 
+   --buttonFinishTop: 65px;
+   --hideRightPosition: -250px;
+}
+
 @keyframes onScreenSlide {
-  0% {
-    left: -16em;
-  }
-  100% {
-    left: 0em;
-  }
+  0%   { right: var(--hideRightPosition); }
+  100% { right: 0px; }
 }
 
 @keyframes offScreenSlide {
-  0% {
-    left: 0em;
-  }
-  100% {
-    left: -16em;
-  }
+  0%   { right: 0px; }
+  100% { right: var(--hideRightPosition); }
+}
+
+@keyframes buttonDownSlide {
+  0%   { top: 0px; }
+  100% { top: var(--buttonFinishTop); }
+}
+
+@keyframes buttonUpSlide {
+  0%   { top: var(--buttonFinishTop); }
+  100% { top: 0px; }
 }
 
 .onScreen {
@@ -24,17 +31,30 @@
   animation: offScreenSlide 2s;
 }
 
+.buttonDown {
+  animation: buttonDownSlide 2s;
+}
+.buttonUp {
+  animation: buttonUpSlide 2s;
+}
+
+#openSettings {
+    position: absolute;
+    width:  9em;
+    right:  0em;
+    z-index: 200;
+}
+
 #settingsForm {
-  position: relative;
+  position: absolute;
   background-color: beige;
   border: 1px solid black;
-  width: 15em;
-  left : -16em;
+  width: 13em;
+  right : var(--hideRightPosition);
   z-index: 1;
 }
 
-#settingsForm div {
+#settingsForm div div {
   display: inline;
   border: 1px solid green;
-  width: 10em;
 }

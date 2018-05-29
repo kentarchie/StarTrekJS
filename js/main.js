@@ -10,9 +10,10 @@ $(document).ready(function() {
 	console.log('init:Start ');
 	makeDisplayHeader('mainDisplay','thead');
 	//makeDisplayRows('mainDisplay');
+   let settings = new SettingsForm('settingsForm','openSettings',100,250,'right');
+   settings.initializeForm();
 	makeDisplayHeader('mainDisplay','tfoot');
 	initData();
-	makeSetupForm();
 	console.log('init:DONE');
 }); // init
 
@@ -238,17 +239,3 @@ function makeDisplayRows(display)
 	//}
 	//console.log('makeDisplayHeader:DONE');
 } // makeDisplayRows
-
-function makeSetupForm()
-{
-	$('#menuToggle').removeClass('initialPlace'); 
-	console.log('class removed');
-	$('#openSettings').click(function(ev) {
-		let menu=$('#menuToggle');
-		let buttonLabel = $.trim($(this).html());
-		buttonLabel = (buttonLabel == 'Open') ? 'Close' : 'Open';
-		$(this).html(buttonLabel);
-		menu.toggleClass('offScreen');
-		menu.toggleClass('onScreen');
-	});
-} // makeSetupForm

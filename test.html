@@ -7,10 +7,6 @@
 	</head>
 
 <body>
-<header>
-    <!-- <div class='titleBar'>Javascript Star Trek</div> -->
-    <div class='controlsBar'></div>
-</header>
 
 <nav role="navigation">
    <div id="settingsForm" class=''>
@@ -22,64 +18,29 @@
          <label for='playMode'>Play Mode</label>
          <div>
             <label for='fastMode'>Fast</label>
-            <input type='radio' name='playMode' id='fastMode' />
+            <input type='radio' name='playMode' id='fastMode' value='fast'/>
             <label for='slowMode'>Slow</label>
-            <input type='radio' name='playMode' id='slowMode' />
+            <input type='radio' name='playMode' id='slowMode' value='slow'/>
          </div>
+         <br />
       
          <label for='priority'>Priority</label>
          <input type='input' id='priority' size=1 />
       </div>
    </div>
-      <button type='button' id='openSettings' >Change Settings</button>
+   <button type='button' id='openSettings' >Change Settings</button>
 </nav>
 
 
     <script type='text/javascript' src='js/vue.js'></script>
     <script type='text/javascript' src='js/jquery.js'></script>
+    <script type='text/javascript' src='js/settingsForm.js'></script>
+    <script type='text/javascript' src='js/js-cookie.js'></script>
     <script type='text/javascript'>
 		$(document).ready(function() {
-			let Menu=$('#settingsForm')
-			    ,SettingsButton=$('#openSettings');
-         let SettingsFormOn = 'Change Settings', SettingsFormOff = 'Save Changes';
-			SettingsButton.html(SettingsFormOn);
-
-         let TransitionEvents = 'webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend';
 			console.log('init:Start ');
-			SettingsButton.click(function(ev) {
-				console.log('openSettings clicked ');
-            ev.preventDefault();
-				let buttonLabel = $.trim(SettingsButton.text());
-				Menu.removeClass('onScreen').removeClass('offScreen');
-            if(buttonLabel == SettingsFormOn) {
-				   console.log('openSettings clicked : SettingsFormOn');
-				   //Menu.css('display','block').addClass('onScreen');
-				   Menu.addClass('onScreen');
-				   Menu.css('left','0em');
-               buttonLabel = SettingsFormOff;
-            }
-            else {
-				   Menu.addClass('offScreen');
-				   Menu.css('left','-16em');
-				   console.log('openSettings clicked : SettingsFormOff');
-               buttonLabel = SettingsFormOn;
-               Menu.on('transitionend webkitTransitionEnd', function(e){
-                     var evt = e.originalEvent
-                     console.log('transition complete');
-                  });
-               /*
-               Menu.one(TransitionEvents, function(ev) {
-                  console.log('transition complete');
-				      Menu.css('display','none');
-               });
-               */
-				   console.log('openSettings clicked : Menu one done');
-            }
-				console.log('final buttonLabel =:'+buttonLabel+':');
-				SettingsButton.html(buttonLabel);
-					
-		   }); // openSettings click
-			console.log('init:DONE');
+         let settings = new SettingsForm('settingsForm','openSettings',100,250,'right');
+         settings.initializeForm(settings);
 		}); // init
 	 
 	 </script>
